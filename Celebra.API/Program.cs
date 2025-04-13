@@ -1,3 +1,4 @@
+using Celebra.Business;
 using Celebra.DAL.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+ServiceRegistration.AddServices(builder.Services);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
