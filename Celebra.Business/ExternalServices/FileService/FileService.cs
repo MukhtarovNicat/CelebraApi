@@ -1,15 +1,19 @@
 ﻿using Celebra.Business.Dtos.FileDtos;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace Celebra.Business.ExternalServices.FileService
 {
     public class FileService : IFileService
     {
-        readonly IWebHostEnvirenment _env;
+        readonly IWebHostEnvironment _env;
+
         public FileService(IWebHostEnvironment env)
         {
             _env = env;
         }
+
         public void DeleteFile(string path)
         {
             string newPath = !path.StartsWith(_env.WebRootPath) ? Path.Combine(_env.WebRootPath, path) : path;
