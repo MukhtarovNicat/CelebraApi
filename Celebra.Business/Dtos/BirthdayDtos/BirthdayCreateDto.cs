@@ -1,5 +1,4 @@
-﻿using Celebra.Core.Entities;
-using Celebra.Core.Enums;
+﻿using Celebra.Core.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace Celebra.Business.Dtos.BirthdayDtos;
@@ -12,5 +11,5 @@ public record BirthdayCreateDto
     public DateTime BirthDate { get; set; }
     public RemindDate? RemindDate { get; set; }
     public DateTime? RemindTime { get; set; }
-    public Category Category { get; set; }
+    public Guid CategoryId { get; set; }
 }

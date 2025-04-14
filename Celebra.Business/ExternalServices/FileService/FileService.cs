@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 
-
 namespace Celebra.Business.ExternalServices.FileService
 {
     public class FileService : IFileService
