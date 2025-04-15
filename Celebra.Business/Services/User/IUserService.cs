@@ -2,5 +2,5 @@
 
 public interface IUserService
 {
-    Task CreateAsync();
+    Task CreateAsync(string ip);
 }
