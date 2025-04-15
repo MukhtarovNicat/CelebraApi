@@ -1,5 +1,6 @@
 ﻿using Celebra.Business.Dtos.BirthdayDtos;
 using Celebra.Business.Services.Birthday;
+using Celebra.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Celebra.API.Controllers;
@@ -20,5 +21,11 @@ public class BirthdayController(IBirthdayService _service) : ControllerBase
     {
         var result = await _service.GetAllAsync(ip);
         return Ok(result);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllByCategory(CategoryType category, string ip)
+    {
+        return Ok(await _service.GetAllByCategoryAsync(category,ip));
     }
 }
