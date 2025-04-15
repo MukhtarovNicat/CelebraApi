@@ -1,5 +1,6 @@
 using Celebra.Business;
 using Celebra.DAL.Contexts;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,8 +19,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
 });
 
+builder.Services.AddHangfire(config =>
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("MSSQL")));
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
+app.UseHangfireDashboard();
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
