@@ -1,7 +1,9 @@
 ﻿using Celebra.Business.Dtos.BirthdayDtos;
 using Celebra.Business.Dtos.FileDtos;
+using Celebra.Business.Exceptions.Common;
 using Celebra.Business.ExternalServices.FileService;
 using Celebra.Business.Statics;
+using Celebra.Core.Entities;
 using Celebra.Core.Enums;
 using Celebra.DAL.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +40,7 @@ public class BirthdayService(AppDbContext _context, IFileService _fileService) :
     }
 
     //==========================================PTIVATE==========================================
-    public static ZodiacSign GetZodiacSign(DateTime date)
+    private static ZodiacSign GetZodiacSign(DateTime date)
     {
         int day = date.Day;
         int month = date.Month;
@@ -60,7 +62,7 @@ public class BirthdayService(AppDbContext _context, IFileService _fileService) :
             _ => throw new Exception("Invalid date")
         };
     }
-    public static ChineseZodiacSign GetChineseZodiacSign(DateTime date)
+    private static ChineseZodiacSign GetChineseZodiacSign(DateTime date)
     {
         int baseYear = 2020; 
         int index = (date.Year - baseYear) % 12;
@@ -69,4 +71,23 @@ public class BirthdayService(AppDbContext _context, IFileService _fileService) :
         return (ChineseZodiacSign)(index + 1);
     }
 
+    public async Task<ICollection<BirthdayGetAllDto>> GetAllAsync(string ip)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Ip == ip)
+            ?? throw new NotFoundException<Core.Entities.Birthday>();
+
+        var birthdays = await _context.Birthdays
+            .Select(b => new BirthdayGetAllDto
+            {
+                Id = b.Id,
+                FullName = $"{b.Name} {b.Surname}", 
+                Image = b.Image,
+                BirthDate = b.BirthDate,
+                ZodiacSign = b.ZodiacSign,
+                ChineseZodiacSign = b.ChineseZodiacSign,
+            })
+            .ToListAsync();
+
+        return birthdays;
+    }
 }

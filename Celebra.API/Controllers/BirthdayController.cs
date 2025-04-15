@@ -14,4 +14,11 @@ public class BirthdayController(IBirthdayService _service) : ControllerBase
         await _service.CreateAsync(dto, ip);
         return Ok();
     }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> BirthdayGetAll(string ip)
+    {
+        var result = await _service.GetAllAsync(ip);
+        return Ok(result);
+    }
 }
