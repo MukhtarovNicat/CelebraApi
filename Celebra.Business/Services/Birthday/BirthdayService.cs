@@ -29,7 +29,7 @@ public class BirthdayService : IBirthdayService
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Ip == ip);
 
-        var defaultRemindDate = RemindDate.OnSmaeDay;
+        var defaultRemindDate = RemindDate.OnSameDay;
         var defaultRemindTime = new DateTime(1, 1, 1, 9, 0, 0);
 
         Core.Entities.Birthday birthday = new()

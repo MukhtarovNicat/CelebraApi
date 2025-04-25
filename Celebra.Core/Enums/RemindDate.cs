@@ -2,7 +2,7 @@
 
 public enum RemindDate : byte
 {
-    OnSmaeDay = 1,
-    OneDayBefore = 2,
-    TwoDaysBefore = 3
+    OnSameDay = 0,
+    OneDayBefore = 1,
+    TwoDaysBefore = 2
 }

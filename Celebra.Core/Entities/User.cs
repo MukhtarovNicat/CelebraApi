@@ -6,4 +6,7 @@ public class User : BaseEntity
 {
     public string Ip { get; set; }
     public ICollection<Birthday>? Birthdays { get; set; }
+    public ICollection<Notification> Notifications { get; set; }
 }
+
+

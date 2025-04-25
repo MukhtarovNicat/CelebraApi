@@ -1,5 +1,7 @@
 ﻿using Celebra.Business.ExternalServices.FileService;
 using Celebra.Business.Services.Birthday;
+using Celebra.Business.Services.BirthdayReminder;
+using Celebra.Business.Services.Notification;
 using Celebra.Business.Services.User;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,5 +15,7 @@ public static class ServiceRegistration
         services.AddScoped<IBirthdayService, BirthdayService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBirthdayReminderService, BirthdayReminderService>();
+        services.AddScoped<INotificationService, NotificationService>();
     }
 }

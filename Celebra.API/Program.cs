@@ -1,4 +1,5 @@
 using Celebra.Business;
+using Celebra.Business.Services.BirthdayReminder;
 using Celebra.DAL.Contexts;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,15 @@ builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IBirthdayReminderService>(
+    "birthday-reminder-job",
+    x => x.CheckBirthdaysAsync(),
+    Cron.Minutely,
+    TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time")
+);
+
+
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
