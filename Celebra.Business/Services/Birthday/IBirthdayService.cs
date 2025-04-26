@@ -8,4 +8,5 @@ public interface IBirthdayService
     Task CreateAsync(BirthdayCreateDto dto, string ip);
     Task<ICollection<BirthdayGetAllDto>> GetAllAsync(string ip);
     Task<ICollection<BirthdayListGetAllByCategoryİdDto>> GetAllByCategoryAsync(CategoryType category, string ip);
+    Task<BirthdayDetailDto> GetByIdAsync(string id);
 }
