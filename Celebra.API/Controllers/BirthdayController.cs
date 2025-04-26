@@ -10,7 +10,7 @@ namespace Celebra.API.Controllers;
 public class BirthdayController(IBirthdayService _service) : ControllerBase
 {
     [HttpPost("[action]")]
-    public async Task<IActionResult> BirthdayCreate(BirthdayCreateDto dto,string ip)
+    public async Task<IActionResult> BirthdayCreate([FromForm]BirthdayCreateDto dto,string ip)
     {
         await _service.CreateAsync(dto, ip);
         return Ok();
@@ -27,5 +27,11 @@ public class BirthdayController(IBirthdayService _service) : ControllerBase
     public async Task<IActionResult> GetAllByCategory(CategoryType category, string ip)
     {
         return Ok(await _service.GetAllByCategoryAsync(category,ip));
+    }
+
+    [HttpGet("[action]/{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        return Ok(await _service.GetByIdAsync(id));
     }
 }

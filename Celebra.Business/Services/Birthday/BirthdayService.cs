@@ -29,7 +29,7 @@ public class BirthdayService : IBirthdayService
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Ip == ip);
 
-        var defaultRemindDate = RemindDate.OnSmaeDay;
+        var defaultRemindDate = RemindDate.OnSameDay;
         var defaultRemindTime = new DateTime(1, 1, 1, 9, 0, 0);
 
         Core.Entities.Birthday birthday = new()
@@ -42,7 +42,7 @@ public class BirthdayService : IBirthdayService
             RemindTime = dto.RemindTime ?? defaultRemindTime,
             UserId = user.Id,
             ZodiacSign = GetZodiacSign(dto.BirthDate),
-            ChineseZodiacSign = GetChineseZodiacSign(dto.BirthDate)
+            ChineseZodiacSign = GetChineseZodiacSign(dto.BirthDate),
         };
 
         if (dto.Image != null)
@@ -57,10 +57,10 @@ public class BirthdayService : IBirthdayService
 
     public async Task<ICollection<BirthdayGetAllDto>> GetAllAsync(string ip)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Ip == ip)
-            ?? throw new NotFoundException<Core.Entities.Birthday>();
+        //var user = await _context.Users.FirstOrDefaultAsync(x => x.Ip == ip)
+        //    ?? throw new NotFoundException<Core.Entities.Birthday>();
 
-        var birthdays = await _context.Birthdays
+        var birthdays = await _context.Birthdays.Where(x => x.User.Ip == ip)
             .Select(b => new BirthdayGetAllDto
             {
                 Id = b.Id,
@@ -69,7 +69,7 @@ public class BirthdayService : IBirthdayService
                 BirthDate = b.BirthDate,
                 ZodiacSign = b.ZodiacSign,
                 ChineseZodiacSign = b.ChineseZodiacSign,
-            })
+            }).OrderBy(x => x.BirthDate.Month)
             .ToListAsync();
 
         return birthdays;
@@ -90,6 +90,23 @@ public class BirthdayService : IBirthdayService
             RemindTime = x.RemindTime,
             BirthDate = x.BirthDate
         }).ToListAsync();
+
+        return res;
+    }
+
+    public async Task<BirthdayDetailDto> GetByIdAsync(string id)
+    {
+        var IdGuid = Guid.Parse(id);
+        var res = await _context.Birthdays.Where(x => x.Id == IdGuid).Select(x => new BirthdayDetailDto
+        {
+            Id = x.Id,
+            BirthDate = x.BirthDate,
+            ChineseZodiacSign = x.ChineseZodiacSign,
+            Image = x.Image != null ? $"{_baseUrl}/{x.Image}" : null,
+            Name = x.Name,
+            Surname = x.Surname,
+            ZodiacSign = x.ZodiacSign
+        }).FirstOrDefaultAsync();
 
         return res;
     }

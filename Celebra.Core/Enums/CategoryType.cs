@@ -1,10 +1,22 @@
-﻿namespace Celebra.Core.Enums;
+﻿using System.ComponentModel.DataAnnotations;
 
-public enum CategoryType : byte
+namespace Celebra.Core.Enums
 {
-    All = 0,
-    Family = 1,
-    Friends = 2,
-    Work = 3,
-    Other = 4,
+    public enum CategoryType : byte
+    {
+        [Display(Name = "All")]
+        All = 0,
+
+        [Display(Name = "Family")]
+        Family = 1,
+
+        [Display(Name = "Friends")]
+        Friends = 2,
+
+        [Display(Name = "Work")]
+        Work = 3,
+
+        [Display(Name = "Other")]
+        Other = 4,
+    }
 }

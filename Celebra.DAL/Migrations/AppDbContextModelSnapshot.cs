@@ -81,6 +81,31 @@ namespace Celebra.DAL.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Celebra.Core.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InformationFullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Celebra.Core.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -115,6 +140,17 @@ namespace Celebra.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Celebra.Core.Entities.Notification", b =>
+                {
+                    b.HasOne("Celebra.Core.Entities.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Celebra.Core.Entities.Category", b =>
                 {
                     b.Navigation("Birthdays");
@@ -123,6 +159,8 @@ namespace Celebra.DAL.Migrations
             modelBuilder.Entity("Celebra.Core.Entities.User", b =>
                 {
                     b.Navigation("Birthdays");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

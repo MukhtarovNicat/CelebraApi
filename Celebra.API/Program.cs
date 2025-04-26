@@ -1,4 +1,5 @@
 using Celebra.Business;
+using Celebra.Business.Services.BirthdayReminder;
 using Celebra.DAL.Contexts;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("_myAllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:8081", "http://192.168.10.183:5257")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -26,6 +39,15 @@ builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IBirthdayReminderService>(
+    "birthday-reminder-job",
+    x => x.CheckBirthdaysAsync(),
+    Cron.Minutely,
+    TimeZoneInfo.FindSystemTimeZoneById("Azerbaijan Standard Time")
+);
+
+
 app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
@@ -38,6 +60,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseCors("_myAllowSpecificOrigins");
 
 app.MapControllers();
 
